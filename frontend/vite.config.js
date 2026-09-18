@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { configDefaults } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react()],
@@ -11,6 +12,7 @@ export default defineConfig({
     },
   },
   test: {
+    exclude: [...configDefaults.exclude, 'e2e/**'],   // vitest NO toca los specs de Playwright
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov', 'json-summary'],
