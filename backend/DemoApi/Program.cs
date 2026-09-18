@@ -32,7 +32,10 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
 }
 
-app.MapGet("/health", () => Results.Ok(new { status = "ok", version = "6.1" }));
+app.MapGet("/health", () => Results.Ok(new {
+    status = "ok",
+    commit = Environment.GetEnvironmentVariable("APP_COMMIT") ?? "desconocido"
+}));
 
 app.MapGet("/api/tareas", async (AppDbContext db) =>
     await db.Tareas.OrderBy(t => t.Id).ToListAsync());
@@ -67,4 +70,3 @@ app.MapDelete("/api/tareas/{id:int}", async (AppDbContext db, int id) =>
 app.Run();
 
 public record TareaNueva(string? Titulo);
-// TODO: endpoint de salud

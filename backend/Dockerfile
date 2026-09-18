@@ -24,5 +24,7 @@ ENTRYPOINT ["dotnet", "test", "Backend.sln", \
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
+ARG APP_COMMIT=desconocido
+ENV APP_COMMIT=$APP_COMMIT
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "DemoApi.dll"]
