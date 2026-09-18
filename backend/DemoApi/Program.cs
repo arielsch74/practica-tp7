@@ -43,13 +43,9 @@ app.MapGet("/api/tareas", async (AppDbContext db) =>
 
 app.MapPost("/api/tareas", async (AppDbContext db, TareaNueva input) =>
 {
-    var resultado = TareaValidator.Validar(input.Titulo);
-    if (!resultado.EsValida)
-        return Results.BadRequest(new { error = resultado.Error });
-
     var tarea = new Tarea
     {
-        Titulo = resultado.TituloNormalizado!,
+        Titulo = input.Titulo!,
         CreadaEl = DateTime.UtcNow
     };
     db.Tareas.Add(tarea);
