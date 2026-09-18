@@ -162,8 +162,8 @@ jobs:
       - name: Smoke test (espera a que QA conteste)
         shell: bash
         env:
-          URL_API: https://practica-tp6-api-qa.onrender.com
-          URL_FRONT: https://practica-tp6-front-qa.onrender.com
+          URL_API: https://practica-tp7-api-qa.onrender.com
+          URL_FRONT: https://practica-tp7-front-qa.onrender.com
         run: |
           echo "Esperando a que QA esté vivo..."
           for i in $(seq 1 30); do
@@ -192,8 +192,8 @@ jobs:
       - name: Smoke test PROD
         shell: bash
         env:
-          URL_API: https://practica-tp6-api-prod.onrender.com
-          URL_FRONT: https://practica-tp6-front-prod.onrender.com
+          URL_API: https://practica-tp7-api-prod.onrender.com
+          URL_FRONT: https://practica-tp7-front-prod.onrender.com
         run: |
           for i in $(seq 1 30); do
             if curl -fsS --max-time 10 "$URL_API/health" \
