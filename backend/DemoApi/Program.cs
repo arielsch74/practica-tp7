@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DemoApi.Data;
 using DemoApi.Logica;
 using DemoApi.Models;
@@ -70,3 +71,6 @@ app.MapDelete("/api/tareas/{id:int}", async (AppDbContext db, int id) =>
 app.Run();
 
 public record TareaNueva(string? Titulo);
+
+[ExcludeFromCodeCoverage]
+public partial class Program { }
