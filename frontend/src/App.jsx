@@ -57,7 +57,7 @@ export default function App() {
 
   return (
     <main className="app">
-      <h1>Tareas</h1>
+      <h1>Mis tareas</h1>
       <p className="subtitulo">
         Sample de la cátedra — Ingeniería del Software 3 · UCC
       </p>
