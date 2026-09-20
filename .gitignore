@@ -6,6 +6,8 @@ TestResults/
 # Node
 node_modules/
 dist/
+playwright-report/
+test-results/
 
 # Secretos locales
 .env
