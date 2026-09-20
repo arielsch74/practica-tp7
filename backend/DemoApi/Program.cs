@@ -50,7 +50,7 @@ app.MapPost("/api/tareas", async (AppDbContext db, TareaNueva input) =>
     var tarea = new Tarea
     {
         Titulo = resultado.TituloNormalizado!,
-        CreadaEl = DateTime.UtcNow
+        CreadaEl = DateTime.Now
     };
     db.Tareas.Add(tarea);
     await db.SaveChangesAsync();
