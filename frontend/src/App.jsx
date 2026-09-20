@@ -59,7 +59,7 @@ export default function App() {
     <main className="app">
       <h1>Tareas</h1>
       <p className="subtitulo">
-        Sample de la cátedra — Ingeniería del Software 3 · UCC · v6.0.0
+        Sample de la cátedra — Ingeniería del Software 3 · UCC
       </p>
 
       <form onSubmit={agregarTarea} className="alta">
