@@ -15,9 +15,10 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@vitejs/plugin-react": "^4.5.2",
+    "@vitest/coverage-v8": "^3.2.7",
     "vite": "^6.3.5",
-    "vitest": "^3.2.4",
-    "@vitest/coverage-v8": "^3.2.7"
+    "vitest": "^3.2.4"
   }
 }

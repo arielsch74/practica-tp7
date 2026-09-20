@@ -211,10 +211,44 @@ jobs:
           done
           echo "❌ QA no llegó a correr $GITHUB_SHA a tiempo"; exit 1
 
+  e2e:
+    runs-on: ubuntu-latest
+    needs: deploy-qa                       # corre DESPUÉS de que QA tiene la imagen nueva
+    timeout-minutes: 20                    # si algo se cuelga, el job muere en vez de esperar horas
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install + browser
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+        working-directory: ./frontend
+
+      - name: e2e contra QA
+        env:
+          E2E_BASE_URL: https://practica-tp7-front-qa.onrender.com
+        run: npx playwright test
+        working-directory: ./frontend
+
+      - name: Publicar reporte e2e
+        uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}            # el reporte importa MÁS cuando falla (y no cuando cancelás)
+        with:
+          name: playwright-report
+          path: frontend/playwright-report
+
   deploy-prod:
     runs-on: ubuntu-latest
-    needs: deploy-qa                            # PROD solo después de QA vivo
+    needs: e2e                             # ← EL gate: sin e2e verde, ni siquiera se pide aprobación
     environment: production                     # ⏸ acá el workflow SE PAUSA hasta el approve
+    concurrency: { group: deploy-prod, cancel-in-progress: false }
     steps:
       - name: Deploy de la MISMA imagen a PROD
         shell: bash
