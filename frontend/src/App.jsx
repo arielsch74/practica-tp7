@@ -38,7 +38,7 @@ export default function App() {
     const res = await fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: validacion.titulo }),
+      body: JSON.stringify({ titulo: validacion.titulo }),
     })
     if (res.ok) {
       setTitulo('')
