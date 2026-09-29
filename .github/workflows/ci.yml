@@ -181,9 +181,41 @@ jobs:
           done
           echo "❌ QA no respondió a tiempo"; exit 1
 
+  integracion:
+    runs-on: ubuntu-latest
+    needs: deploy-qa                       # QA ya está ejecutando la imagen de ESTA corrida
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install (sin browser)
+        run: npm ci                        # ← sin `playwright install`: estas pruebas no abren navegador
+        working-directory: ./frontend
+
+      - name: Integración contra la api de QA
+        env:
+          API_BASE_URL: https://practica-tp7-api-qa.onrender.com
+        run: npx playwright test e2e/api.spec.js
+        working-directory: ./frontend
+
+      - name: Publicar reporte de integración
+        uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-integracion   # distinto del de e2e: dos iguales rompen la corrida
+          path: frontend/playwright-report
+          retention-days: 7
+
   e2e:
     runs-on: ubuntu-latest
-    needs: deploy-qa                       # corre DESPUÉS de que QA tiene la imagen nueva
+    needs: integracion                     # si la api está rota, no gastamos un browser en confirmarlo
     timeout-minutes: 20                    # si algo se cuelga, el job muere en vez de esperar horas
     steps:
       - uses: actions/checkout@v6
@@ -204,14 +236,14 @@ jobs:
       - name: e2e contra QA
         env:
           E2E_BASE_URL: https://practica-tp7-front-qa.onrender.com
-        run: npx playwright test
+        run: npx playwright test e2e/tareas.spec.js   # ← SU archivo: sin esto vuelve a correr la integración
         working-directory: ./frontend
 
       - name: Publicar reporte e2e
         uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}            # el reporte importa MÁS cuando falla (y no cuando cancelás)
         with:
-          name: playwright-report
+          name: playwright-report-e2e
           path: frontend/playwright-report
 
   deploy-prod:
