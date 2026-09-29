@@ -22,8 +22,6 @@ ENTRYPOINT ["dotnet", "test", "Backend.sln", \
 
 # ---- Etapa 3: runtime (imagen mínima, sin SDK) ----
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
-ARG APP_COMMIT=desconocido
-ENV APP_COMMIT=$APP_COMMIT
 WORKDIR /app
 COPY --from=build /app/publish .
 EXPOSE 8080
