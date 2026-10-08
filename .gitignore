@@ -14,3 +14,8 @@ dist/
 .DS_Store
 .vs/
 .idea/
+
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars        # ahí van los valores locales
