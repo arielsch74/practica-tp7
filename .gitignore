@@ -19,3 +19,8 @@ dist/
 *.tfstate.*
 .terraform/
 *.tfvars        # ahí van los valores locales
+
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars        # ahí van los valores locales
