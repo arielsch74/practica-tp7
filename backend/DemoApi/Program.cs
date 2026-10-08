@@ -32,7 +32,8 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
 }
 
-app.MapGet("/health", () => Results.Ok(new { status = "ok", version = "6.1" }));
+// GET y HEAD: los monitores externos suelen preguntar con HEAD, y un MapGet a secas les contesta 405.
+app.MapMethods("/health", new[] { "GET", "HEAD" }, () => Results.Ok(new { status = "ok", version = "6.1" }));
 
 app.MapGet("/api/tareas", async (AppDbContext db) =>
     await db.Tareas.OrderBy(t => t.Id).ToListAsync());
