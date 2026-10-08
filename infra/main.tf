@@ -4,7 +4,7 @@ terraform {
   required_providers {
     neon = {
       source  = "kislerdm/neon"
-      version = "0.18.0"        # fijada: ver la advertencia del encabezado
+      version = "0.18.0" # fijada: ver la advertencia del encabezado
     }
     render = {
       source  = "render-oss/render"
@@ -13,8 +13,8 @@ terraform {
   }
 }
 
-provider "neon" {}              # lee NEON_API_KEY
-provider "render" {}            # lee RENDER_API_KEY y RENDER_OWNER_ID
+provider "neon" {}   # lee NEON_API_KEY
+provider "render" {} # lee RENDER_API_KEY y RENDER_OWNER_ID
 
 # --- El proyecto de Neon de PREPROD: no existe hasta que esto se aplica ---
 
@@ -29,7 +29,7 @@ resource "neon_project" "preprod" {
 
 resource "neon_role" "preprod" {
   project_id = neon_project.preprod.id
-  branch_id  = neon_project.preprod.default_branch_id   # 🔴 default_branch_id, NO branch_id
+  branch_id  = neon_project.preprod.default_branch_id # 🔴 default_branch_id, NO branch_id
   name       = "app_preprod_owner"
 }
 
@@ -53,8 +53,8 @@ resource "render_web_service" "api" {
 
   runtime_source = {
     image = {
-      image_url = var.image_repo_api   # 🔴 SIN la etiqueta pegada
-      tag       = var.image_tag        #    la etiqueta va en su propio campo
+      image_url = var.image_repo_api # 🔴 SIN la etiqueta pegada
+      tag       = var.image_tag      #    la etiqueta va en su propio campo
     }
   }
 
@@ -76,7 +76,7 @@ resource "render_web_service" "front" {
   }
 
   env_vars = {
-    BACKEND_URL  = { value = render_web_service.api.url }   # ← la URL sale de Terraform, no de un copy-paste
+    BACKEND_URL  = { value = render_web_service.api.url } # ← la URL sale de Terraform, no de un copy-paste
     DNS_RESOLVER = { value = "8.8.8.8" }
   }
 }
