@@ -6,7 +6,7 @@ output "database" {
   value = neon_database.preprod.name
 }
 
-output "api_url"   { value = render_web_service.api.url }
+output "api_url" { value = render_web_service.api.url }
 output "front_url" { value = render_web_service.front.url }
 
 output "project_id" { value = neon_project.preprod.id }
