@@ -5,6 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Observabilidad (TP9): los errores y los tiempos de cada pedido van a Sentry.
+// La dirección (DSN) llega por el entorno; si no está, el SDK queda apagado y la app anda igual.
+builder.WebHost.UseSentry(o =>
+{
+    o.Dsn = builder.Configuration["SENTRY_DSN"] ?? "";
+    o.TracesSampleRate = 1.0;      // medir todos los pedidos: en una app chica, entra en el plan gratuito
+});
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
@@ -34,6 +42,9 @@ using (var scope = app.Services.CreateScope())
 
 // GET y HEAD: los monitores externos suelen preguntar con HEAD, y un MapGet a secas les contesta 405.
 app.MapMethods("/health", new[] { "GET", "HEAD" }, () => Results.Ok(new { status = "ok", version = "6.1" }));
+
+// Un error a propósito, para ver cómo llega a Sentry (TP9 §3.5). Se saca al terminar el práctico.
+app.MapGet("/api/falla", string () => throw new InvalidOperationException("Falla de prueba del TP9"));
 
 app.MapGet("/api/tareas", async (AppDbContext db) =>
     await db.Tareas.OrderBy(t => t.Id).ToListAsync());
